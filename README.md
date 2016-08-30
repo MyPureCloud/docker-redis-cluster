@@ -49,6 +49,11 @@ You have a few options for running the image:
   * If built using docker-compose, run `docker-compose -f compose.yml up`
   * If built using docker, run `docker run -it --net=host <user>/redis-cluster:<version>`
 
+# Connecting to Cluster
+
+```
+redis-cli -c -h <host> -p 7000
+```
 
 # Known Issues
 
