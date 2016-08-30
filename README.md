@@ -1,5 +1,7 @@
 # docker-redis-cluster
 
+Hub: https://hub.docker.com/r/druotic/redis-cluster/
+
 ##### Quick Note
 
 This is a fork of Grokzen's [docker-redis-cluster](https://github.com/Grokzen/docker-redis-cluster) which attempts
