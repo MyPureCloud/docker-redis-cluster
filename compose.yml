@@ -6,4 +6,8 @@ services:
       args:
         redis_version: 3.2.3
       dockerfile: Dockerfile
-    network_mode: host
+    ports:
+      - "7000-7005"
+    environment:
+      REDIS_CLUSTER_ADVERTISED_IP: ${REDIS_CLUSTER_ADVERTISED_IP}
+    network_mode: ${REDIS_CLUSTER_DOCKER_NET_MODE}
