@@ -4,8 +4,8 @@
 IP=$REDIS_CLUSTER_ADVERTISED_IP
 
 if [ -z "$IP" ]; then
-  echo "REDIS_CLUSTER_ADVERTISED_IP not provided. Exiting."
-  exit 1
+  echo "REDIS_CLUSTER_ADVERTISED_IP not provided. Assuming eth0 interface address"
+  IP=`ifconfig eth0 | grep "inet addr:" | cut -f2 -d ":" | cut -f1 -d " "`
 fi
 
 echo "Using cluster bind IP $IP"
