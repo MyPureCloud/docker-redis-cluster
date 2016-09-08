@@ -1,5 +1,14 @@
-# redis cluster doesn't play well with docker (or other NAT'd environments), have to explicitly advertise externally routable IP
-IP=`ifconfig eth1 | grep "inet addr:" | cut -f2 -d ":" | cut -f1 -d " "`
+# Redis cluster doesn't play well with NAT'd environments (e.g. docker-machine) -
+# have to explicitly advertise externally routable IP if NAT'd. After
+# https://github.com/antirez/redis/issues/2527, announce ip/port can be used
+IP=$REDIS_CLUSTER_ADVERTISED_IP
+
+if [ -z "$IP" ]; then
+  echo "REDIS_CLUSTER_ADVERTISED_IP not provided. Assuming eth0 interface address"
+  IP=`ifconfig eth0 | grep "inet addr:" | cut -f2 -d ":" | cut -f1 -d " "`
+fi
+
+echo "Using cluster bind IP $IP"
 
 # Check if bind address has been added yet, only add on initial container start to
 # avoid duplicates on container restarts
@@ -14,5 +23,7 @@ if [ -z "$bind_line" ]; then
 fi
 
 supervisord
+sleep 3
+
 echo "yes" | ruby /redis/src/redis-trib.rb create --replicas 1 ${IP}:7000 ${IP}:7001 ${IP}:7002 ${IP}:7003 ${IP}:7004 ${IP}:7005
 tail -f /var/log/supervisor/redis-1.log
